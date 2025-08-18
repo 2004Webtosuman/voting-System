@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Gate Console</title>
+	<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+	<header>
+		<h1>Gate Console</h1>
+	</header>
+	<main>
+		<section class="left">
+			<h2>Scan QR Token</h2>
+			<input id="qr-token" placeholder="Paste QR token here" style="width:100%" />
+			<button id="verify-btn">Verify</button>
+			<pre id="gate-result"></pre>
+		</section>
+	</main>
+	<script>
+	const verifyBtn = document.getElementById('verify-btn');
+	verifyBtn.addEventListener('click', async () => {
+		const token = document.getElementById('qr-token').value.trim();
+		const res = await fetch('/api/qr.php?action=verify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token }) });
+		const data = await res.json();
+		document.getElementById('gate-result').textContent = JSON.stringify(data, null, 2);
+	});
+	</script>
+</body>
+</html>

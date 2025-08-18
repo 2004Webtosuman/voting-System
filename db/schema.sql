@@ -1,0 +1,75 @@
+-- Smart Parking DB schema
+
+CREATE TABLE IF NOT EXISTS users (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(190) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  role ENUM('user','admin') NOT NULL DEFAULT 'user',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS zones (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  x FLOAT NOT NULL DEFAULT 0,
+  y FLOAT NOT NULL DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS slots (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  zone_id BIGINT UNSIGNED NOT NULL,
+  name VARCHAR(100) NOT NULL,
+  x FLOAT NOT NULL DEFAULT 0,
+  y FLOAT NOT NULL DEFAULT 0,
+  status ENUM('available','booked','disabled') NOT NULL DEFAULT 'available',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_slots_zone FOREIGN KEY (zone_id) REFERENCES zones(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS edges (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  from_slot_id BIGINT UNSIGNED NOT NULL,
+  to_slot_id BIGINT UNSIGNED NOT NULL,
+  weight DECIMAL(8,2) NOT NULL,
+  CONSTRAINT fk_edges_from FOREIGN KEY (from_slot_id) REFERENCES slots(id) ON DELETE CASCADE,
+  CONSTRAINT fk_edges_to FOREIGN KEY (to_slot_id) REFERENCES slots(id) ON DELETE CASCADE,
+  INDEX idx_edges_from (from_slot_id),
+  INDEX idx_edges_to (to_slot_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS bookings (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  user_id BIGINT UNSIGNED NOT NULL,
+  slot_id BIGINT UNSIGNED NOT NULL,
+  starts_at DATETIME NOT NULL,
+  ends_at DATETIME NOT NULL,
+  status ENUM('active','cancelled','completed') NOT NULL DEFAULT 'active',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_bookings_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT fk_bookings_slot FOREIGN KEY (slot_id) REFERENCES slots(id) ON DELETE CASCADE,
+  INDEX idx_bookings_slot_time (slot_id, starts_at, ends_at),
+  INDEX idx_bookings_user (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS qr_tokens (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  booking_id BIGINT UNSIGNED NOT NULL,
+  token VARCHAR(128) NOT NULL UNIQUE,
+  issued_at DATETIME NOT NULL,
+  expires_at DATETIME NOT NULL,
+  used TINYINT(1) NOT NULL DEFAULT 0,
+  CONSTRAINT fk_qr_booking FOREIGN KEY (booking_id) REFERENCES bookings(id) ON DELETE CASCADE,
+  INDEX idx_qr_token (token)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS occupancy_log (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  slot_id BIGINT UNSIGNED NOT NULL,
+  ts DATETIME NOT NULL,
+  occupied TINYINT(1) NOT NULL,
+  CONSTRAINT fk_occ_slot FOREIGN KEY (slot_id) REFERENCES slots(id) ON DELETE CASCADE,
+  INDEX idx_occ_time (ts),
+  INDEX idx_occ_slot (slot_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

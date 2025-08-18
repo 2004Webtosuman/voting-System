@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Smart Parking</title>
+	<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+	<header>
+		<h1>Smart Parking</h1>
+		<nav id="auth-nav">
+			<div id="guest-actions">
+				<input id="reg-name" placeholder="Name" />
+				<input id="reg-email" placeholder="Email" />
+				<input id="reg-pass" type="password" placeholder="Password" />
+				<button id="register-btn">Register</button>
+				<input id="login-email" placeholder="Email" />
+				<input id="login-pass" type="password" placeholder="Password" />
+				<button id="login-btn">Login</button>
+			</div>
+			<div id="user-actions" class="hidden">
+				<span id="user-info"></span>
+				<button id="logout-btn">Logout</button>
+			</div>
+		</nav>
+	</header>
+
+	<main>
+		<section class="left">
+			<h2>Parking Map</h2>
+			<canvas id="map" width="600" height="400"></canvas>
+			<div class="controls">
+				<label>Start time <input type="datetime-local" id="start-time" /></label>
+				<label>End time <input type="datetime-local" id="end-time" /></label>
+				<button id="suggest-nearest">Suggest nearest available</button>
+				<button id="book-selected">Book selected</button>
+			</div>
+			<div id="status"></div>
+		</section>
+
+		<section class="right">
+			<h2>My Bookings</h2>
+			<ul id="my-bookings"></ul>
+
+			<h2>Predicted Occupancy (next 24h)</h2>
+			<canvas id="chart" width="300" height="150"></canvas>
+
+			<h2>Gate</h2>
+			<a href="/gate.html" target="_blank">Open Gate Console</a>
+		</section>
+	</main>
+
+	<script src="/app.js"></script>
+</body>
+</html>
