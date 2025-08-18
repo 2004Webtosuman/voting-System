@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Parking</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Smart Parking Slot Booking</h1>
+            <div id="auth">
+                <div id="auth-forms">
+                    <input id="email" placeholder="Email" />
+                    <input id="password" type="password" placeholder="Password" />
+                    <button id="loginBtn">Login</button>
+                    <button id="registerBtn">Register</button>
+                </div>
+                <div id="user-info" class="hidden">
+                    <span id="userName"></span>
+                    <button id="logoutBtn">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <section class="controls">
+                <select id="zoneSelect"></select>
+                <select id="entranceSelect"></select>
+                <button id="nearestBtn">Find Nearest Slot</button>
+                <button id="predictBtn">Predict 24h</button>
+            </section>
+
+            <section class="map" id="map"></section>
+
+            <section class="booking">
+                <h2>Booking</h2>
+                <div>
+                    <input id="start" type="datetime-local" />
+                    <input id="end" type="datetime-local" />
+                    <button id="bookBtn">Book Selected Slot</button>
+                </div>
+                <div id="bookingResult"></div>
+            </section>
+
+            <section class="qr">
+                <h2>QR Entry/Exit</h2>
+                <div>
+                    <input id="exitBookingId" placeholder="Booking ID" />
+                    <button id="exitBtn">Mark Exit</button>
+                </div>
+                <div>
+                    <video id="qrVideo" autoplay playsinline></video>
+                    <button id="scanBtn">Scan QR</button>
+                    <div id="scanResult"></div>
+                </div>
+            </section>
+
+            <section class="admin hidden" id="adminPanel">
+                <h2>Admin Panel</h2>
+                <div>
+                    <input id="newZoneName" placeholder="Zone name" />
+                    <input id="newZoneDesc" placeholder="Description" />
+                    <button id="addZoneBtn">Add Zone</button>
+                </div>
+                <div>
+                    <input id="slotZoneId" placeholder="Zone ID" />
+                    <input id="slotLabel" placeholder="Slot label" />
+                    <input id="slotX" placeholder="X" />
+                    <input id="slotY" placeholder="Y" />
+                    <button id="addSlotBtn">Add Slot</button>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
+

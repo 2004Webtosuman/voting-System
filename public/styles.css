@@ -1,0 +1,20 @@
+* { box-sizing: border-box; }
+body { font-family: Arial, sans-serif; margin: 0; background: #f5f7fb; color: #222; }
+.container { max-width: 1100px; margin: 0 auto; padding: 16px; }
+header { display: flex; justify-content: space-between; align-items: center; }
+header h1 { margin: 0; font-size: 22px; }
+#auth input { padding: 6px 8px; margin-right: 8px; }
+button { padding: 8px 12px; margin-right: 8px; cursor: pointer; }
+.hidden { display: none; }
+
+.controls { margin: 12px 0; }
+.map { border: 1px solid #ddd; border-radius: 8px; background: #fff; height: 360px; padding: 8px; display: grid; grid-template-columns: repeat(12, 1fr); gap: 8px; }
+.slot { border: 1px solid #ccc; border-radius: 4px; padding: 6px; text-align: center; background: #d6ffd6; }
+.slot.unavailable { background: #ffd6d6; }
+.slot.selected { outline: 3px solid #007bff; }
+.entrance { background: #e7f1ff; border: 1px dashed #007bff; grid-column: span 2; text-align: center; padding: 6px; border-radius: 4px; }
+
+.booking, .qr { margin-top: 16px; background: #fff; padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
+
+video { width: 100%; max-height: 220px; background: #000; }
+
